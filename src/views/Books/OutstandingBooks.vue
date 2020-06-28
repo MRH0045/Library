@@ -84,8 +84,8 @@ export default {
           if (res.status === 0) {
             this.requestData()
             this.$message({
-              type: 'success',
-              message: res.msg
+              type: 'success'
+              // message: res.msg
             })
           }
         })

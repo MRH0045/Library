@@ -1,111 +1,73 @@
 <template>
   <div class="app-container">
-
-    <el-dialog
-      :title="`个人信息`"
-      :visible.sync="showDialog"
-      width="30%"
-      @close="showDialog = false"
-    >
-      <el-container>
-        <el-aside width="100px" />
-        <el-main>
-          <span>
-
-            <el-avatar
-              shape="square"
-
-              src="user.headPortrait"
-            /></span>
-          <br><br>
-          <span> <i class="el-icon-user" />
-            真实姓名:{{ user.realName }}</span><br><br>
-          <span>
-            <svg-icon icon-class="sex" />
-            性别:{{ user.sex?user.sex:'未填写' }}</span><br><br>
-          <span> <i class="el-icon-mobile" />
-            手机:{{ user.phone?user.phone:'未填写' }}</span><br><br>
-          <span>
-            <svg-icon icon-class="qq" />
-            QQ:{{ user.qq ?user.qq:'未填写' }}</span><br><br>
-
-        </el-main>
-        <el-aside width="100px" />
-      </el-container>
-
-    </el-dialog>
+    <p>
+      {{ message }}
+    </p>
+    <p>
+      <el-input v-model="input" placeholder="序列号" />
+    </p>
+    <p>
+      <el-input v-model="input" placeholder="书籍名称" />
+    </p>
+    <p>
+      <el-input v-model="input" placeholder="作者" />
+    </p>
+    <p>
+      <el-input v-model="input" placeholder="出版社" />
+    </p>
+    <p>
+      <el-input v-model="input" placeholder="数量" />
+    </p>
+    <p>
+      <el-select v-model="value" placeholder="请选择图书种类">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </p>
+    <p>
+      <el-select v-model="value" placeholder="请选择存储位置">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </p>
+    <el-row>
+      <el-button type="primary">确认</el-button>
+    </el-row>
 
   </div>
 </template>
 
 <script lang="ts">
-import { queryUser, forbidUser } from '@/api/manager'
 
 export default {
-  name: 'User',
   data() {
     return {
-      data: [],
-      selectUserId: [],
-      queryOptions: {
-        nickName: '',
-        page: 1,
-        pageSize: 10
-      },
-      user: {},
-      total: 0,
-      loading: true,
-      showDialog: false
-    }
-  },
-  created() {
-    // this.requestData()
-  },
-  methods: {
-    requestData() {
-      queryUser(this.queryOptions).then(res => {
-        if (res.status === 0) {
-          this.data = res.data.list
-          this.total = res.data.total
-          this.loading = false
-        }
-      })
-    },
-    handleSelect(select) {
-      this.selectUserId = select.map(item => {
-        return item.id
-      })
-    },
-    handleForbid(id) {
-      this.$confirm(`确定封禁(解禁)用户吗？`, '提示', {
-        type: 'warning'
-      }).then(() => {
-        forbidUser(id).then(res => {
-          if (res.status === 0) {
-            this.requestData()
-            this.$message({
-              type: 'success',
-              message: res
-            })
-          }
-        })
-      })
-    },
-    handleFilter() {
-      this.queryOptions.page = 1
-      this.requestData()
-    },
-    handlePersonInfo(user) {
-      this.user = user
-      this.showDialog = true
-    },
-    handleSizeChange(val) {
-      this.queryOptions.pageSize = val
-      this.requestData()
-    },
-    handleCurrentChange(val) {
-      this.queryOptions.page = val
-      this.requestData()
+      message: '图书信息',
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      value: ''
     }
   }
 }
