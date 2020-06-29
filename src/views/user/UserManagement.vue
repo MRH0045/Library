@@ -31,20 +31,6 @@
           :value="item.value"
         />
       </el-select>
-      <!-- <el-button
-        type="primary"
-        plain
-        @click="showCheckbox=!showCheckbox"
-      >
-        多选
-      </el-button>
-      <el-button
-        v-if="showCheckbox"
-        type="danger"
-        @click="handleBatchDelete"
-      >
-        批量冻结
-      </el-button> -->
     </el-form>
     <el-table
       :data="data"

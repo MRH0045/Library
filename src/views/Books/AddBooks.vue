@@ -1,74 +1,176 @@
 <template>
   <div class="app-container">
-    <p>
-      {{ message }}
-    </p>
-    <p>
-      <el-input v-model="input" placeholder="序列号" />
-    </p>
-    <p>
-      <el-input v-model="input" placeholder="书籍名称" />
-    </p>
-    <p>
-      <el-input v-model="input" placeholder="作者" />
-    </p>
-    <p>
-      <el-input v-model="input" placeholder="出版社" />
-    </p>
-    <p>
-      <el-input v-model="input" placeholder="数量" />
-    </p>
-    <p>
-      <el-select v-model="value" placeholder="请选择图书种类">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </p>
-    <p>
-      <el-select v-model="value" placeholder="请选择存储位置">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </p>
-    <el-row>
-      <el-button type="primary">确认</el-button>
-    </el-row>
+    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+
+      <el-form-item label="图书名称" prop="name">
+        <el-input v-model="ruleForm.name" />
+      </el-form-item>
+
+      <el-form-item label="ISBN" prop="isbn">
+        <el-input v-model="ruleForm.isbn" />
+      </el-form-item>
+      <el-form-item label="作者" prop="author">
+        <el-input v-model="ruleForm.author" />
+      </el-form-item>
+
+      <el-form-item label="图书类别" prop="bookKind">
+        <el-select v-model="ruleForm.bookKind" placeholder="请选择图书类别">
+          <el-option v-for="item in bookKind" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="存放位置" prop="bookSite">
+        <el-select v-model="ruleForm.bookSite" placeholder="请选择图书存放位置">
+          <el-option v-for="item in bookSite" :key="item.id" :label="item.area+item.bookcaseNum" :value="item.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="图书总量" prop="total">
+        <el-input-number v-model="ruleForm.total" :min="1" :max="1000" label="图书总量" />
+      </el-form-item>
+      <el-form-item label="出版社名称" prop="namePub">
+        <el-input v-model="ruleForm.namePub" />
+      </el-form-item>
+
+      <el-form-item label="图书简介" prop="details">
+        <el-input v-model="ruleForm.details" type="textarea" />
+      </el-form-item>
+      <el-form-item label="上传图片" prop="bookPicture">
+        <el-upload
+          class="avatar-uploader"
+          action="http://localhost:8000/v1/system/uploadAvatar"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+          name="image"
+          with-credentials
+        >
+          <img v-if="ruleForm.bookPicture" :src="ruleForm.bookPicture" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+      </el-form-item>
+
+      <el-form-item style="float:right;">
+        <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
 
   </div>
 </template>
-
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>
 <script lang="ts">
-
+import { getAllBookLocation } from '@/api/bookLocation'
+import { queryAllBookType } from '@/api/bookType'
 export default {
   data() {
     return {
-      message: '图书信息',
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: ''
+      bookKind: [],
+      bookSite: [],
+      value: '',
+      ruleForm: {
+        name: '',
+        isbn: '',
+        author: '',
+        bookPicture: '',
+        bookKind: '',
+        namePub: '',
+        details: '',
+        bookSite: '',
+        total: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入图书名称', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        isbn: [
+          { required: true, message: '请输入图书isbn', trigger: 'blur' },
+          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        ],
+        namePub: [
+          { required: true, message: '请输入出版社名称', trigger: 'blur' }
+        ],
+        author: [
+          { required: true, message: '请输入作者名字', trigger: 'blur' }
+        ],
+        total: [
+          { required: true, message: '请输入图书总量', trigger: 'blur' }
+        ],
+        bookKind: [
+          { required: true, message: '请选择图书类别', trigger: 'change' }
+        ],
+        bookSite: [
+          { required: true, message: '请选择图书存放位置', trigger: 'change' }
+        ],
+        details: [
+          { required: true, message: '请填写图书简介', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  created() {
+    this.requestData()
+  },
+  methods: {
+    handleAvatarSuccess(res, file) {
+      if (res.status === 0) {
+        this.ruleForm.bookPicture = 'http://localhost:8000/img/' + res.data
+        console.log(this.ruleForm.bookPicture)
+      }
+    },
+    beforeAvatarUpload(file) {
+      console.log(file)
+      const isLt5M = file.size / 1024 / 1024 < 5
+      if (!isLt5M) {
+        this.$message.error('上传头像图片大小不能超过 5MB!')
+      }
+      return isLt5M
+    },
+    requestData() {
+      getAllBookLocation().then((res) => {
+        this.bookSite = res.data
+      })
+      queryAllBookType().then((res) => {
+        this.bookKind = res.data
+      })
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
+
 </script>
