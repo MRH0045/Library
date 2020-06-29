@@ -35,6 +35,11 @@ export const constantRoutes = [
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
+  },
+  {
+    path: '/register',
+    component: () => import('@/views/register/index'),
+    hidden: true
   }
 ]
 
@@ -107,13 +112,13 @@ export const asyncRoutes = [
   }, {
     path: '/user',
     component: Layout,
-    redirect: '/user/index',
+    redirect: '/user/UserManagement',
     children: [
       {
-        path: '/user/index',
-        name: 'AAA',
-        component: () => import('@/views/user/index'),
-        meta: { title: '我的', icon: 'user' }
+        path: '/user/UserManagement',
+        name: 'UserManagement',
+        component: () => import('@/views/user/UserManagement'),
+        meta: { title: '用户管理', icon: 'user', roles: ['LibManage', 'sysManager'] }
       }
     ]
   },

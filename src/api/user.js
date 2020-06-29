@@ -37,3 +37,26 @@ export function updateUserInfo(data) {
     data
   })
 }
+
+export function queryUser(params) {
+  return request({
+    url: '/user/query',
+    method: 'get',
+    params
+  })
+}
+
+export function removeUser(id) {
+  return request({
+    url: '/user/' + id,
+    method: 'delete'
+  })
+}
+
+export function register(params) {
+  return request({
+    url: '/v1/system/register',
+    method: 'post',
+    params
+  })
+}

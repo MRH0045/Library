@@ -3,7 +3,7 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title">图书管理系统</h3>
+        <h3 class="title">用户注册</h3>
       </div>
       <el-form-item prop="code">
         <span class="svg-container">
@@ -13,7 +13,7 @@
           ref="code"
           v-model="loginForm.code"
 
-          placeholder="请输入账号"
+          placeholder="请输入学号"
           name="code"
           type="text"
           tabindex="1"
@@ -41,34 +41,22 @@
         </span>
       </el-form-item>
 
-      <!-- <el-form-item prop="role">
-        <el-select v-model="value" style="width:520px" placeholder="请选择角色">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-
-      </el-form-item> -->
-
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin()">登陆</el-button>
-      <el-button style="float:right;" type="text" @click="toRegieter">没有账号?立即注册</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin()">注册</el-button>
+      <el-button style="float:right;" type="text" @click="toLogin">已有账号?返回登录</el-button>
     </el-form>
 
   </div>
 </template>
 
 <script>
-
+import { register } from '@/api/user'
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     return {
       loginForm: {
-        code: '123',
-        password: '123'
+        code: '',
+        password: ''
       },
       loginRules: {
         code: [{ required: true, trigger: 'blur' }],
@@ -76,19 +64,7 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined,
-      options: [{
-        value: '0',
-        label: '普通用户'
-      }, {
-        value: '1',
-        label: '图书管理员'
-      }, {
-        value: '2',
-        label: '系统管理员'
-      }],
-      value: '0'
-
+      redirect: undefined
     }
   },
   watch: {
@@ -110,23 +86,31 @@ export default {
         this.$refs.password.focus()
       })
     },
-    toRegieter() {
-      this.$router.push({ path: '/register' })
+    toLogin() {
+      this.$router.push('/login')
     },
-
     async handleLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then((res) => {
-            this.$router.push({ path: '/Books/index' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
+      register(this.loginForm).then((res) => {
+        if (res.status === 0) {
+          this.$alert('立即登录？', '注册成功', {
+            confirmButtonText: '确定',
+            callback: action => {
+              this.$refs.loginForm.validate(valid => {
+                if (valid) {
+                  this.loading = true
+                  this.$store.dispatch('user/login', this.loginForm).then((res) => {
+                    this.$router.push({ path: '/Books/index' })
+                    this.loading = false
+                  }).catch(() => {
+                    this.loading = false
+                  })
+                } else {
+                  console.log('error submit!!')
+                  return false
+                }
+              })
+            }
           })
-        } else {
-          console.log('error submit!!')
-          return false
         }
       })
     }
