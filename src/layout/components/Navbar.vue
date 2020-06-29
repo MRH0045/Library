@@ -11,14 +11,7 @@
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
 
-          <router-link to="/post/examine">
-
-            <el-dropdown-item divided>
-              待审核帖子
-              <el-badge v-if="showBadge" :max="99" class="mark" :value="num" />
-            </el-dropdown-item>
-
-          </router-link>
+          <router-link to="/post/examine" />
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">登出</span>
           </el-dropdown-item>

@@ -6,7 +6,7 @@
       :model="queryOptions"
       @submit.native.prevent="handleFilter"
     >
-      <el-form-item
+      <!-- <el-form-item
         prop="keyWords"
       >
         <el-input
@@ -22,15 +22,17 @@
         >
           搜索
         </el-button>
+      </el-form-item> -->
+      <el-form-item>
+        <el-select v-model="queryOptions.postType" clearable placeholder="用户状态" @change="selectForm()">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-select v-model="queryOptions.postType" clearable placeholder="用户状态" @change="selectForm()">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
       <!-- <el-button
         type="primary"
         plain
@@ -63,39 +65,39 @@
       <el-table-column
         align="center"
         label="用户名称"
-        prop="name"
+        prop="user.name"
       />
       <el-table-column
         align="center"
         label="用户学号"
-        prop="studentNumber"
+        prop="user.studentNumber"
       />
       <el-table-column
         align="center"
-        prop="details"
-        label="用户备注"
+        prop="book.name"
+        label="图书名"
       />
       <el-table-column
         align="center"
-        label="用户状态"
-        prop="status"
+        label="归还状态"
+        prop="borrowLog.status"
       >
         <template slot-scope="scope">
           <el-tag>
-            <span v-if="scope.row.status===0">正常</span>
-            <span v-if="scope.row.status===1">封禁</span>
+            <span v-if="scope.row.borrowLog.status===0">已还</span>
+            <span v-if="scope.row.borrowLog.status===1">未还</span>
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column
         align="center"
-        prop="effDate"
-        label="生效时间"
+        prop="borrowLog.borrowTime"
+        label="借书时间"
       />
       <el-table-column
         align="center"
-        prop="expDete"
-        label="失效时间"
+        prop="borrowLog.returnTime"
+        label="归还时间"
       />
 
       <el-table-column
@@ -152,10 +154,10 @@
   }
 </style>
 <script lang="ts">
-import { queryUser, removeUser } from '@/api/user'
+import { queryBorrowLog } from '@/api/borrowLog'
 
 export default {
-  name: 'UserManagement',
+  name: 'BorrowLog',
   data() {
     return {
       data: [],
@@ -170,13 +172,12 @@ export default {
       loading: true,
       options: [{
         value: '0',
-        label: '正常'
+        label: '已还'
       }, {
         value: '1',
-        label: '封禁'
+        label: '未还'
       }],
-      value: '',
-      user: {}
+      value: ''
     }
   },
   created() {
@@ -187,10 +188,11 @@ export default {
       this.requestData()
     },
     requestData() {
-      queryUser(this.queryOptions).then((res) => {
+      queryBorrowLog(this.queryOptions).then((res) => {
         if (res.status === 0) {
           this.data = res.data.data
           this.total = res.data.total
+          console.log(this.data)
         }
       })
     },
@@ -203,10 +205,6 @@ export default {
       this.queryOptions.page = 1
       this.requestData()
     },
-    handlePersonInfo(user) {
-      this.user = user
-      this.showDialog = true
-    },
     handleSizeChange(val) {
       this.queryOptions.pageSize = val
       this.requestData()
@@ -216,15 +214,7 @@ export default {
       this.requestData()
     },
     handleDelete(id) {
-      removeUser(id).then((res) => {
-        if (res.status === 0) {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-        }
-        this.requestData()
-      })
+
     }
 
   }

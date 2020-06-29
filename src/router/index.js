@@ -110,7 +110,7 @@ export const asyncRoutes = [
       }
     ]
   }, {
-    path: '/user',
+    path: '/UserManagement',
     component: Layout,
     redirect: '/user/UserManagement',
     children: [
@@ -119,6 +119,19 @@ export const asyncRoutes = [
         name: 'UserManagement',
         component: () => import('@/views/user/UserManagement'),
         meta: { title: '用户管理', icon: 'user', roles: ['LibManage', 'sysManager'] }
+      }
+    ]
+  },
+  {
+    path: '/borrowLog',
+    component: Layout,
+    redirect: '/borrowLog/index',
+    children: [
+      {
+        path: '/borrowLog/index',
+        name: 'borrowLog',
+        component: () => import('@/views/borrowLog/index'),
+        meta: { title: '借书记录', icon: 'user' }
       }
     ]
   },
