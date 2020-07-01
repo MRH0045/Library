@@ -1,30 +1,31 @@
 import request from '@/utils/request'
 
-export function getBookLocation(id) {
-  return request({
-    url: '/bookLocation?id=id',
-    method: 'get',
-    id
-  })
-}
-
-export function addBook() {
+export function addBook(data) {
   return request({
     url: '/books',
-    method: 'post'
+    method: 'put',
+    data
   })
 }
 
-export function borrowBook() {
+export function borrowBook(id) {
   return request({
-    url: '/books/borrow',
-    method: 'post'
+    url: '/books/borrow/' + id,
+    method: 'put'
   })
 }
 
-export function returnBook() {
+export function returnBook(id) {
   return request({
-    url: '/books/return',
-    method: 'post'
+    url: '/books/return/' + id,
+    method: 'put'
+  })
+}
+
+export function queryAllBooks(params) {
+  return request({
+    url: '/books/query',
+    method: 'get',
+    params
   })
 }

@@ -6,25 +6,8 @@
       :model="queryOptions"
       @submit.native.prevent="handleFilter"
     >
-      <!-- <el-form-item
-        prop="keyWords"
-      >
-        <el-input
-          v-model="queryOptions.keyWords"
-          placeholder="请输入用户关键字"
-        />
-      </el-form-item>
-
       <el-form-item>
-        <el-button
-          icon="el-icon-search"
-          @click="handleFilter"
-        >
-          搜索
-        </el-button>
-      </el-form-item> -->
-      <el-form-item>
-        <el-select v-model="queryOptions.postType" clearable placeholder="用户状态" @change="selectForm()">
+        <el-select v-model="queryOptions.status" clearable placeholder="归还状态" @change="selectForm()">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -192,7 +175,6 @@ export default {
         if (res.status === 0) {
           this.data = res.data.data
           this.total = res.data.total
-          console.log(this.data)
         }
       })
     },

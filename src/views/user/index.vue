@@ -1,11 +1,6 @@
 <template>
-
   <div class="app-container">
-
     <el-container>
-      <!-- <el-header style="background-color: rgb(238, 220, 246)">
-        <span>个人信息</span>
-      </el-header> -->
       <el-main style="background-color: rgb(238, 241, 246)" width="100px">
         <el-form label-position="left" class="demo-table-expand">
           <el-form-item v-if="user.name" label="昵称:">
@@ -42,6 +37,20 @@
   </div>
 </template>
 
+<style >
+.demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
+</style>>
 <script lang="ts">
 import { getUserInfo } from '@/api/user'
 export default {

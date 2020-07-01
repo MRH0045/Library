@@ -12,7 +12,20 @@
       <el-form-item label="作者" prop="author">
         <el-input v-model="ruleForm.author" />
       </el-form-item>
+      <el-form-item label="出版社名称" prop="namePub">
+        <el-input v-model="ruleForm.namePub" />
+      </el-form-item>
 
+      <el-form-item label="图书简介" prop="details">
+        <el-input v-model="ruleForm.details" type="textarea" />
+      </el-form-item>
+      <el-form-item label="出版日期" prop="dataPub">
+        <el-date-picker
+          v-model="ruleForm.dataPub"
+          type="date"
+          placeholder="选择日期"
+        />
+      </el-form-item>
       <el-form-item label="图书类别" prop="bookKind">
         <el-select v-model="ruleForm.bookKind" placeholder="请选择图书类别">
           <el-option v-for="item in bookKind" :key="item.id" :label="item.name" :value="item.id" />
@@ -26,14 +39,8 @@
       <el-form-item label="图书总量" prop="total">
         <el-input-number v-model="ruleForm.total" :min="1" :max="1000" label="图书总量" />
       </el-form-item>
-      <el-form-item label="出版社名称" prop="namePub">
-        <el-input v-model="ruleForm.namePub" />
-      </el-form-item>
 
-      <el-form-item label="图书简介" prop="details">
-        <el-input v-model="ruleForm.details" type="textarea" />
-      </el-form-item>
-      <el-form-item label="上传图片" prop="bookPicture">
+      <el-form-item label="上传封面图片" prop="bookPicture">
         <el-upload
           class="avatar-uploader"
           action="http://localhost:8000/v1/system/uploadAvatar"
@@ -84,6 +91,7 @@
 <script lang="ts">
 import { getAllBookLocation } from '@/api/bookLocation'
 import { queryAllBookType } from '@/api/bookType'
+import { addBook } from '@/api/book'
 export default {
   data() {
     return {
@@ -99,16 +107,15 @@ export default {
         namePub: '',
         details: '',
         bookSite: '',
-        total: ''
+        total: '',
+        dataPub: ''
       },
       rules: {
         name: [
-          { required: true, message: '请输入图书名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入图书名称', trigger: 'blur' }
         ],
         isbn: [
-          { required: true, message: '请输入图书isbn', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入图书isbn', trigger: 'blur' }
         ],
         namePub: [
           { required: true, message: '请输入出版社名称', trigger: 'blur' }
@@ -157,14 +164,9 @@ export default {
         this.bookKind = res.data
       })
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+    submitForm() {
+      addBook(this.ruleForm).then((res) => {
+        console.log(res)
       })
     },
     resetForm(formName) {
