@@ -24,8 +24,8 @@ export function removeBookLocation(id) {
 
 export function addBookLocation(params) {
   return request({
-    url: '/bookLocation',
-    method: 'post',
+    url: '/bookLocation/save',
+    method: 'put',
     params
   })
 }

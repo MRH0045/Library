@@ -26,7 +26,7 @@
           icon="el-icon-plus"
           @click="handleCreate"
         >
-          类别
+          位置
         </el-button>
       </el-form-item>
 
@@ -71,12 +71,12 @@
         label="操作"
       >
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             @click="handleEdit(scope.row)"
           >
             编辑
-          </el-button>
+          </el-button> -->
           <el-button
             type="danger"
             size="mini"
@@ -142,7 +142,7 @@
 </template>
 
 <script lang="ts">
-import { getAllBookLocation, removeBookLocation, updateBookLocation, addBookLocation } from '@/api/bookLocation'
+import { getAllBookLocation, removeBookLocation, addBookLocation } from '@/api/bookLocation'
 
 export default {
   name: 'ItemType',
@@ -186,35 +186,35 @@ export default {
       this.showDialog = true
     },
     handleSave() {
-      this.$refs['editForm'].validate((valid) => {
-        if (!valid) {
-          return false
-        }
-        if (this.item.id) {
-          updateBookLocation({ name: this.editForm.name, id: this.item.id }).then((res) => {
-            if (res.status === 0) {
-              this.resetForm()
-              this.showDialog = false
-              this.$message({
-                type: 'success',
-                message: '修改成功!'
-              })
-              this.requestData()
-            }
+      // this.$refs['editForm'].validate((valid) => {
+      //   if (!valid) {
+      //     return false
+      //   }
+      //   if (this.item.id) {
+      //     updateBookLocation({ name: this.editForm.name, id: this.item.id }).then((res) => {
+      //       if (res.status === 0) {
+      //         this.resetForm()
+      //         this.showDialog = false
+      //         this.$message({
+      //           type: 'success',
+      //           message: '修改成功!'
+      //         })
+      //         this.requestData()
+      //       }
+      //     })
+      //   } else {
+      addBookLocation(this.editForm).then((res) => {
+        if (res.status === 0) {
+          this.showDialog = false
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
           })
-        } else {
-          addBookLocation(this.editForm).then((res) => {
-            if (res.status === 0) {
-              this.showDialog = false
-              this.$message({
-                type: 'success',
-                message: '添加成功!'
-              })
-              this.requestData()
-            }
-          })
+          this.requestData()
         }
       })
+      // }
+      // })
     },
     handleDelete(id) {
       this.$confirm(`确定删除吗？`, '提示', {
