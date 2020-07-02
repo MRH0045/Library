@@ -82,6 +82,7 @@
       >
         <template slot-scope="scope">
           <el-button
+            v-if="scope.row.borrowLog.status===1"
             type="primary"
             size="mini"
             @click="handleReturn(scope.row.borrowLog.id)"

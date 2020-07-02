@@ -60,3 +60,11 @@ export function register(params) {
     params
   })
 }
+
+export function banUser(id, operation) {
+  return request({
+    url: '/user/ban',
+    params: { id: id, operation: operation },
+    method: 'put'
+  })
+}

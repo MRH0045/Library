@@ -93,9 +93,17 @@
             v-if="scope.row.status===0"
             type="primary"
             size="mini"
-            @click="handlebit(scope.row)"
+            @click="handlebit(scope.row.id,1)"
           >
             封禁
+          </el-button>
+          <el-button
+            v-if="scope.row.status===1"
+            type="primary"
+            size="mini"
+            @click="handlebit(scope.row.id,0)"
+          >
+            解封
           </el-button>
           <el-button
             type="danger"
@@ -138,7 +146,7 @@
   }
 </style>
 <script lang="ts">
-import { queryUser, removeUser } from '@/api/user'
+import { queryUser, removeUser, banUser } from '@/api/user'
 
 export default {
   name: 'UserManagement',
@@ -169,6 +177,24 @@ export default {
     this.requestData()
   },
   methods: {
+    handlebit(id, operation) {
+      banUser(id, operation).then((res) => {
+        if (operation === 0) {
+          this.$message({
+            message: '解封成功',
+            type: 'success'
+          })
+        }
+        if (operation === 1) {
+          this.$message({
+            message: '封禁成功',
+            type: 'success'
+          })
+        }
+
+        this.requestData()
+      })
+    },
     selectForm() {
       this.requestData()
     },
