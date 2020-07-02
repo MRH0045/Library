@@ -137,7 +137,7 @@ export const asyncRoutes = [
         path: '/borrowLog/index',
         name: 'borrowLog',
         component: () => import('@/views/borrowLog/index'),
-        meta: { title: '借书记录', icon: 'user' }
+        meta: { title: '借书记录', icon: 'user', roles: ['LibManage', 'sysManager'] }
       }
     ]
   },
@@ -150,7 +150,7 @@ export const asyncRoutes = [
         path: '/bookType/index',
         name: 'bookType',
         component: () => import('@/views/bookType/index'),
-        meta: { title: '图书类别', icon: 'user' }
+        meta: { title: '图书类别', icon: 'user', roles: ['LibManage', 'sysManager'] }
       }
     ]
   },
@@ -163,7 +163,7 @@ export const asyncRoutes = [
         path: '/bookSite/index',
         name: 'bookSite',
         component: () => import('@/views/bookSite/index'),
-        meta: { title: '图书位置', icon: 'user' }
+        meta: { title: '图书位置', icon: 'user', roles: ['LibManage', 'sysManager'] }
       }
     ]
   },

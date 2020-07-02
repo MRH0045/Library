@@ -20,10 +20,13 @@
         <el-input v-model="ruleForm.details" type="textarea" />
       </el-form-item>
       <el-form-item label="出版日期" prop="dataPub">
+
         <el-date-picker
           v-model="ruleForm.dataPub"
-          type="date"
-          placeholder="选择日期"
+          type="datetime"
+          format="yyyy 年 MM 月 dd 日"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          placeholder="选择日期时间"
         />
       </el-form-item>
       <el-form-item label="图书类别" prop="bookKind">
@@ -123,7 +126,7 @@ export default {
         author: [
           { required: true, message: '请输入作者名字', trigger: 'blur' }
         ],
-        ruleTotal: [
+        total: [
           { required: true, message: '请输入图书总量', trigger: 'blur' }
         ],
         bookKind: [
