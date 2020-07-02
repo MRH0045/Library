@@ -29,3 +29,18 @@ export function queryAllBooks(params) {
     params
   })
 }
+
+export function removeBook(id) {
+  return request({
+    url: '/books/' + id,
+    method: 'delete'
+  })
+}
+
+export function updateBook(data) {
+  return request({
+    url: '/books/update',
+    method: 'put',
+    data
+  })
+}

@@ -17,7 +17,7 @@ export function updateBookLocation(params) {
 
 export function removeBookLocation(id) {
   return request({
-    url: '/bookLocation' + id,
+    url: '/bookLocation/' + id,
     method: 'delete'
   })
 }

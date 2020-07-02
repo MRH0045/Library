@@ -30,9 +30,37 @@
           <el-form-item label="备注:">
             <span>{{ user.details }}</span>
           </el-form-item>
+          <div style="text-align: right; margin: 0">
+
+            <el-button type="primary" @click="showpostDetail = true">修改信息</el-button>
+
+          </div>
         </el-form>
       </el-main>
     </el-container>
+    <el-dialog
+      :title="'修改信息'"
+      :visible.sync="showpostDetail"
+      width="50%"
+      @close="showpostDetail = false"
+    >
+      <el-form label-position="left" inline class="demo-table-expand">
+        <el-form-item label="昵称" prop="name">
+          <el-input v-model="updateForm.name" />
+        </el-form-item>
+        <el-form-item label="手机号码" prop="phone">
+          <el-input v-model="updateForm.phone" />
+        </el-form-item>
+        <el-form-item label="备注" prop="detalis">
+          <el-input v-model="updateForm.detalis" />
+        </el-form-item>
+        <div style="text-align: right; margin: 0">
+          <el-form-item><el-button @click="showpostDetail = false">取消</el-button>
+            <el-button type="primary" @click="handleInfo">修改</el-button>
+          </el-form-item>
+        </div>
+      </el-form>
+    </el-dialog>
 
   </div>
 </template>
@@ -47,17 +75,19 @@
   }
   .demo-table-expand .el-form-item {
     margin-right: 0;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     width: 50%;
   }
 </style>>
 <script lang="ts">
-import { getUserInfo } from '@/api/user'
+import { getUserInfo, updateUserInfo } from '@/api/user'
 export default {
   name: 'User',
   data() {
     return {
-      user: {}
+      showpostDetail: false,
+      user: {},
+      updateForm: {}
     }
   },
   created() {
@@ -66,8 +96,16 @@ export default {
   methods: {
     requestData() {
       getUserInfo().then((res) => {
-        console.log(res)
         this.user = res.data
+      })
+    },
+    handleInfo() {
+      updateUserInfo({ id: this.user.id, name: this.updateForm.name, phone: this.updateForm.phone, detalis: this.updateForm.detalis }).then((res) => {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.showpostDetail = false
       })
     }
   }

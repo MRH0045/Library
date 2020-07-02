@@ -211,6 +211,16 @@ export default {
     },
     handleBook(item) {
       this.book = item
+      for (var i = 0; i < this.bookSite.length; i++) {
+        if (item.bookSite === this.bookSite[i].id) {
+          this.book.bookSite = this.bookSite[i].area + this.bookSite[i].bookcaseNum
+        }
+      }
+      for (var j = 0; j < this.bookKind.length; j++) {
+        if (item.bookKind === this.bookKind[j].id) {
+          this.book.bookKind = this.bookKind[j].name
+        }
+      }
       this.showpostDetail = true
     },
     handleFilter() {

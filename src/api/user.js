@@ -32,7 +32,7 @@ export function changePassword(data) {
 
 export function updateUserInfo(data) {
   return request({
-    url: '/v1/system/updateUserInfo',
+    url: 'user',
     method: 'put',
     data
   })

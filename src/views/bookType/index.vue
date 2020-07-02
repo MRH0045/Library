@@ -6,27 +6,27 @@
       :model="queryOptions"
       @submit.native.prevent="handleFilter"
     >
-      <el-form-item
+      <!-- <el-form-item
         prop="name"
       >
         <el-input
           v-model="queryOptions.name"
-          placeholder="请输入物品名称"
+          placeholder="请输入类别名称"
         />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
-        <el-button
+        <!-- <el-button
           icon="el-icon-search"
           @click="handleFilter"
         >
           搜索
-        </el-button>
+        </el-button> -->
         <el-button
           type="primary"
           icon="el-icon-plus"
           @click="handleCreate"
         >
-          物品
+          类别
         </el-button>
       </el-form-item>
 
@@ -42,12 +42,12 @@
     >
       <el-table-column
         align="center"
-        label="物品Id"
+        label="类别Id"
         prop="id"
       />
       <el-table-column
         align="center"
-        label="物品名称"
+        label="类别名称"
         prop="name"
       />
       <el-table-column
@@ -85,7 +85,7 @@
     </el-table>
 
     <el-dialog
-      :title="`修改信息`"
+      :title="`添加类别`"
       :visible.sync="showDialog"
       @close="showDialog = false"
     >
@@ -98,11 +98,11 @@
       >
         <el-form-item
           prop="name"
-          label="物品名称"
+          label="类别名称"
         >
           <el-input
             v-model="editForm.name"
-            placeholder="请输入物品名称"
+            placeholder="请输入类别名称"
             maxlength="10"
           />
         </el-form-item>
@@ -127,14 +127,13 @@
 </template>
 
 <script lang="ts">
-import { queryItemType, createItem, putItem, deleteItem } from '@/api/item-type'
+import { queryAllBookType, addBookType, removeBookType, updateBookType } from '@/api/bookType'
 
 export default {
   name: 'ItemType',
   data() {
     return {
       data: [],
-      selectUserId: [],
       queryOptions: {
         name: '',
         page: 1,
@@ -152,11 +151,11 @@ export default {
     }
   },
   created() {
-    //   this.requestData()
+    this.requestData()
   },
   methods: {
     requestData() {
-      queryItemType(this.queryOptions).then((res) => {
+      queryAllBookType().then((res) => {
         if (res.status === 0) {
           this.data = res.data
           this.loading = false
@@ -174,7 +173,7 @@ export default {
           return false
         }
         if (this.item.id) {
-          putItem({ name: this.editForm.name, id: this.item.id }).then((res) => {
+          updateBookType({ name: this.editForm.name, id: this.item.id }).then((res) => {
             if (res.status === 0) {
               this.resetForm()
               this.showDialog = false
@@ -186,7 +185,7 @@ export default {
             }
           })
         } else {
-          createItem(this.editForm).then((res) => {
+          addBookType(this.editForm).then((res) => {
             if (res.status === 0) {
               this.showDialog = false
               this.$message({
@@ -203,7 +202,7 @@ export default {
       this.$confirm(`确定删除吗？`, '提示', {
         type: 'warning'
       }).then(() => {
-        deleteItem(id).then((res) => {
+        removeBookType(id).then((res) => {
           if (res.status === 0) {
             this.$message({
               type: 'success',

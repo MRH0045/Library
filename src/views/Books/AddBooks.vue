@@ -36,7 +36,7 @@
           <el-option v-for="item in bookSite" :key="item.id" :label="item.area+item.bookcaseNum" :value="item.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="图书总量" prop="total">
+      <el-form-item label="图书总量" prop="ruleTotal">
         <el-input-number v-model="ruleForm.total" :min="1" :max="1000" label="图书总量" />
       </el-form-item>
 
@@ -107,7 +107,7 @@ export default {
         namePub: '',
         details: '',
         bookSite: '',
-        total: '',
+        total: 1,
         dataPub: ''
       },
       rules: {
@@ -123,7 +123,7 @@ export default {
         author: [
           { required: true, message: '请输入作者名字', trigger: 'blur' }
         ],
-        total: [
+        ruleTotal: [
           { required: true, message: '请输入图书总量', trigger: 'blur' }
         ],
         bookKind: [

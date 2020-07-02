@@ -121,17 +121,7 @@ export default {
         pageSize: 10,
         status: '',
         sortType: 0
-      },
-      tableData: [{
-        name: '紫禁城的黄昏',
-        count: '1',
-        address: '2 楼'
-      },
-      {
-        name: '紫禁城的黄昏2',
-        count: '1',
-        address: ' 2楼'
-      }]
+      }
     }
   },
   created() {

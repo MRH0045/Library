@@ -107,6 +107,12 @@ export const asyncRoutes = [
         name: 'AddBooks',
         component: () => import('@/views/Books/AddBooks'),
         meta: { title: '添加图书', icon: 'item', roles: ['LibManage', 'sysManager'] }
+      },
+      {
+        path: 'handleBook',
+        name: 'handleBook',
+        component: () => import('@/views/Books/handleBook'),
+        meta: { title: '图书管理', icon: 'item', roles: ['LibManage', 'sysManager'] }
       }
     ]
   }, {
@@ -132,6 +138,32 @@ export const asyncRoutes = [
         name: 'borrowLog',
         component: () => import('@/views/borrowLog/index'),
         meta: { title: '借书记录', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/bookType',
+    component: Layout,
+    redirect: '/bookType/index',
+    children: [
+      {
+        path: '/bookType/index',
+        name: 'bookType',
+        component: () => import('@/views/bookType/index'),
+        meta: { title: '图书类别', icon: 'user' }
+      }
+    ]
+  },
+  {
+    path: '/bookSite',
+    component: Layout,
+    redirect: '/bookSite/index',
+    children: [
+      {
+        path: '/bookSite/index',
+        name: 'bookSite',
+        component: () => import('@/views/bookSite/index'),
+        meta: { title: '图书位置', icon: 'user' }
       }
     ]
   },
