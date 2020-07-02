@@ -103,52 +103,54 @@
       </el-table-column>
     </el-table>
     <el-dialog
-      :title="book.name"
+      :title="'修改图书信息'"
       :visible.sync="showpostDetail"
       width="50%"
       @close="showpostDetail = false"
     >
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+      <el-form ref="book" :model="book" :rules="rules" label-width="100px" class="demo-ruleForm">
 
         <el-form-item label="图书名称" prop="name">
-          <el-input v-model="ruleForm.name" />
+          <el-input v-model="book.name" />
         </el-form-item>
 
         <el-form-item label="ISBN" prop="isbn">
-          <el-input v-model="ruleForm.isbn" />
+          <el-input v-model="book.isbn" />
         </el-form-item>
         <el-form-item label="作者" prop="author">
-          <el-input v-model="ruleForm.author" />
+          <el-input v-model="book.author" />
         </el-form-item>
         <el-form-item label="出版社名称" prop="namePub">
-          <el-input v-model="ruleForm.namePub" />
+          <el-input v-model="book.namePub" />
         </el-form-item>
 
         <el-form-item label="图书简介" prop="details">
-          <el-input v-model="ruleForm.details" type="textarea" />
+          <el-input v-model="book.details" type="textarea" />
         </el-form-item>
         <el-form-item label="出版日期" prop="dataPub">
           <el-date-picker
-            v-model="ruleForm.dataPub"
-            type="date"
-            placeholder="选择日期"
+            v-model="book.dataPub"
+            type="datetime"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择日期时间"
           />
         </el-form-item>
         <el-form-item label="图书类别" prop="bookKind">
-          <el-select v-model="ruleForm.bookKind" placeholder="请选择图书类别">
+          <el-select v-model="book.bookKind" placeholder="请选择图书类别">
             <el-option v-for="item in bookKind" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="存放位置" prop="bookSite">
-          <el-select v-model="ruleForm.bookSite" placeholder="请选择图书存放位置">
+          <el-select v-model="book.bookSite" placeholder="请选择图书存放位置">
             <el-option v-for="item in bookSite" :key="item.id" :label="item.area+item.bookcaseNum" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="图书总量" prop="ruleTotal">
-          <el-input-number v-model="ruleForm.total" :min="1" :max="1000" label="图书总量" />
+          <el-input-number v-model="book.total" :min="1" :max="1000" label="图书总量" />
         </el-form-item>
 
-        <!-- <el-form-item label="上传封面图片" prop="bookPicture">
+        <el-form-item label="上传封面图片" prop="bookPicture">
           <el-upload
             class="avatar-uploader"
             action="http://localhost:8000/v1/system/uploadAvatar"
@@ -158,16 +160,21 @@
             name="image"
             with-credentials
           >
-            <img v-if="ruleForm.bookPicture" :src="ruleForm.bookPicture" class="avatar">
+            <img v-if="book.bookPicture" :src="book.bookPicture" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
-        </el-form-item> -->
-
-        <el-form-item style="float:right;">
-          <el-button type="primary" @click="submitForm('ruleForm')">添加</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
+
       </el-form>
+      <div
+        slot="footer"
+      >
+        <el-button type="primary" @click="submitForm()">修改</el-button>
+        <el-button @click="showpostDetail = false">
+          取 消
+        </el-button>
+      </div>
+
     </el-dialog>
     <el-pagination
       v-show="total > 0"
@@ -179,7 +186,6 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-
   </div>
 </template>
 
@@ -195,6 +201,29 @@
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+    .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>
 <script lang="ts">
@@ -216,18 +245,19 @@ export default {
         status: '',
         sortType: 0
       },
-      ruleForm: {
-        name: '',
-        isbn: '',
-        author: '',
-        bookPicture: '',
-        bookKind: '',
-        namePub: '',
-        details: '',
-        bookSite: '',
-        total: 1,
-        dataPub: ''
-      },
+      // ruleForm: {
+      //   id: '',
+      //   name: '',
+      //   isbn: '',
+      //   author: '',
+      //   bookPicture: '',
+      //   bookKind: '',
+      //   namePub: '',
+      //   details: '',
+      //   bookSite: '',
+      //   total: 1,
+      //   dataPub: ''
+      // },
       total: 0,
       loading: true,
       value: '',
@@ -273,6 +303,18 @@ export default {
   methods: {
     selectForm() {
       this.requestData()
+    },
+    submitForm() {
+      updateBook(this.book).then((res) => {
+        if (res.status === 0) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+        }
+        this.showpostDetail = false
+        this.requestData()
+      })
     },
     requestData() {
       queryAllBooks(this.queryOptions).then((res) => {

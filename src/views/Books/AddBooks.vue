@@ -152,7 +152,6 @@ export default {
       }
     },
     beforeAvatarUpload(file) {
-      console.log(file)
       const isLt5M = file.size / 1024 / 1024 < 5
       if (!isLt5M) {
         this.$message.error('上传头像图片大小不能超过 5MB!')
@@ -169,7 +168,11 @@ export default {
     },
     submitForm() {
       addBook(this.ruleForm).then((res) => {
-        console.log(res)
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.ruleForm = {}
       })
     },
     resetForm(formName) {

@@ -102,7 +102,7 @@
         label-position="top"
       >
         <el-form-item
-          prop="name"
+          prop="area"
           label="区域号"
         >
           <el-input
@@ -112,7 +112,7 @@
           />
         </el-form-item>
         <el-form-item
-          prop="name"
+          prop="bookcaseNum"
           label="书架号"
         >
           <el-input
@@ -162,7 +162,8 @@ export default {
       loading: true,
       showDialog: false,
       rules: {
-        name: [{ required: true, message: '物品名称不能为空', trigger: 'blur' }]
+        area: [{ required: true, message: '区域不能为空', trigger: 'blur' }],
+        bookcaseNum: [{ required: true, message: '书架号不能为空', trigger: 'blur' }]
       }
     }
   },

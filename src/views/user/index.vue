@@ -3,7 +3,7 @@
     <el-container>
       <el-main style="background-color: rgb(238, 241, 246)" width="100px">
         <el-form label-position="left" class="demo-table-expand">
-          <el-form-item v-if="user.name" label="昵称:">
+          <el-form-item label="昵称:">
             <span>{{ user.name }}</span>
           </el-form-item>
           <el-form-item v-if="user.username" label="用户名:">
@@ -12,7 +12,7 @@
           <el-form-item v-if="user.studentNumber" label="学号:">
             <span>{{ user.studentNumber }}</span>
           </el-form-item>
-          <el-form-item v-if="user.phone" label="手机号码:">
+          <el-form-item label="手机号码:">
             <span>{{ user.phone }}</span>
           </el-form-item>
           <el-form-item v-if="user.brrowedCount" label="已借图书:">
@@ -87,7 +87,11 @@ export default {
     return {
       showpostDetail: false,
       user: {},
-      updateForm: {}
+      updateForm: {
+        id: '',
+        name: '',
+        details: ''
+      }
     }
   },
   created() {
@@ -100,11 +104,12 @@ export default {
       })
     },
     handleInfo() {
-      updateUserInfo({ id: this.user.id, name: this.updateForm.name, phone: this.updateForm.phone, detalis: this.updateForm.detalis }).then((res) => {
+      updateUserInfo(this.updateForm).then((res) => {
         this.$message({
           message: '修改成功',
           type: 'success'
         })
+        this.requestData()
         this.showpostDetail = false
       })
     }
