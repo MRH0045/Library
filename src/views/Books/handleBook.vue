@@ -12,6 +12,8 @@
         <el-input
           v-model="queryOptions.keyWords"
           placeholder="请输入用户关键字"
+          clearable
+          @clear="handleFilter"
         />
       </el-form-item>
 
@@ -239,7 +241,7 @@ export default {
       bookKind: [],
       data: [],
       queryOptions: {
-        keyWords: '',
+        keyWords: null,
         page: 1,
         pageSize: 10,
         status: '',

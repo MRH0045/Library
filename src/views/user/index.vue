@@ -42,17 +42,17 @@
       :title="'修改信息'"
       :visible.sync="showpostDetail"
       width="50%"
-      @close="showpostDetail = false"
+      @close="flush()"
     >
       <el-form label-position="left" inline class="demo-table-expand">
         <el-form-item label="昵称" prop="name">
-          <el-input v-model="updateForm.name" />
+          <el-input v-model="user.name" />
         </el-form-item>
         <el-form-item label="手机号码" prop="phone">
-          <el-input v-model="updateForm.phone" />
+          <el-input v-model="user.phone" />
         </el-form-item>
-        <el-form-item label="备注" prop="detalis">
-          <el-input v-model="updateForm.detalis" />
+        <el-form-item label="备注" prop="details">
+          <el-input v-model="user.details" type="textarea" />
         </el-form-item>
         <div style="text-align: right; margin: 0">
           <el-form-item><el-button @click="showpostDetail = false">取消</el-button>
@@ -86,12 +86,12 @@ export default {
   data() {
     return {
       showpostDetail: false,
-      user: {},
-      updateForm: {
-        id: '',
-        name: '',
-        details: ''
-      }
+      user: {}
+      // updateForm: {
+      //   id: '',
+      //   name: '',
+      //   details: ''
+      // }
     }
   },
   created() {
@@ -103,8 +103,12 @@ export default {
         this.user = res.data
       })
     },
+    flush() {
+      this.showpostDetail = false
+      this.requestData()
+    },
     handleInfo() {
-      updateUserInfo(this.updateForm).then((res) => {
+      updateUserInfo(this.user).then((res) => {
         this.$message({
           message: '修改成功',
           type: 'success'
